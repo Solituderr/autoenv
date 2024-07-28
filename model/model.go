@@ -2,11 +2,14 @@ package model
 
 import (
 	"github.com/Solituderr/autoenv/model/etcdm"
-	etcdServer "github.com/kitex-contrib/config-etcd/server"
+	"github.com/cloudwego/kitex/pkg/registry"
+	"github.com/kitex-contrib/config-etcd/etcd"
 )
 
-var EtcdServerSuite *etcdServer.EtcdServerSuite
+var EtcdRegistry registry.Registry
+var EtcdClient etcd.Client
 
 func Init() {
-	EtcdServerSuite = etcdm.NewEtcdClient()
+	EtcdClient = etcdm.NewEtcdClient()
+	EtcdRegistry = etcdm.NewEtcdRegistry()
 }

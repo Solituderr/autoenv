@@ -8,6 +8,7 @@ import (
 	"github.com/Solituderr/autoenv/util"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	etcdServer "github.com/kitex-contrib/config-etcd/server"
 	"log"
 )
 
@@ -18,7 +19,8 @@ func main() {
 	svr := autoenv.NewServer(
 		new(EtcdEnvServiceImpl),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.Config.Service.Name}),
-		server.WithSuite(model.EtcdServerSuite),
+		server.WithRegistry(model.EtcdRegistry),
+		server.WithSuite(etcdServer.NewSuite(conf.Config.Service.Name, model.EtcdClient)),
 	)
 
 	err := svr.Run()

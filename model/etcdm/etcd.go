@@ -2,19 +2,23 @@ package etcdm
 
 import (
 	"github.com/Solituderr/autoenv/conf"
+	"github.com/cloudwego/kitex/pkg/registry"
 	"github.com/kitex-contrib/config-etcd/etcd"
-	etcdServer "github.com/kitex-contrib/config-etcd/server"
+	etcdregistry "github.com/kitex-contrib/registry-etcd"
 )
 
-var EtcdClient etcd.Client
-
-func NewEtcdClient() *etcdServer.EtcdServerSuite {
-	var err error
-	EtcdClient, err = etcd.NewClient(etcd.Options{Node: []string{conf.Config.Etcd.Host}})
-	suite := etcdServer.NewSuite(conf.Config.Service.Name, EtcdClient)
-
+func NewEtcdRegistry() registry.Registry {
+	r, err := etcdregistry.NewEtcdRegistry([]string{conf.Config.Service.Name})
 	if err != nil {
 		panic(err)
 	}
-	return suite
+	return r
+}
+
+func NewEtcdClient() etcd.Client {
+	c, err := etcd.NewClient(etcd.Options{Node: []string{conf.Config.Etcd.Host}})
+	if err != nil {
+		panic(err)
+	}
+	return c
 }
